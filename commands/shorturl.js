@@ -22,6 +22,7 @@ module.exports = new Command({
 
         if (!data.ok) return interaction.reply({ content: `Ссылка ${url} была заблокирована или произошла ошибка`, components: [] });
 
+
         const Shrtco = new ButtonBuilder()
             .setLabel('Shrtco.de')
             .setURL(data.result.full_short_link)
