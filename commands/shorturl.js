@@ -1,7 +1,7 @@
 const Command = require('../structure/command.js');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const Discord = require('discord.js');
-const fetchUrl = require("node-fetch");
+const fetchUrl = require("axios");
 
 module.exports = new Command({
     name: "shorturl",
@@ -17,10 +17,9 @@ module.exports = new Command({
         const url = args.getString("link", true);
         if (!url.trim()) return interaction.reply({ content: 'Ссылка не может быть пуста', components: [] });
 
-        const response = await fetchUrl(`https://api.shrtco.de/v2/shorten?url=${url}`)
-        const data = await response.json();
-
-        if (!data.ok) return interaction.reply({ content: `Ссылка ${url} была заблокирована или произошла ошибка`, components: [] });
+        const data_ = await fetchUrl.get(`https://api.shrtco.de/v2/shorten?url=${url}`)
+        const data = data_.data
+        if (!data) return interaction.reply({ content: `Ссылка ${url} была заблокирована или произошла ошибка`, components: [] });
 
 
         const Shrtco = new ButtonBuilder()

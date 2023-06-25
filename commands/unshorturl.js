@@ -1,7 +1,7 @@
 const Command = require('../structure/command.js');
 const Discord = require('discord.js');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const fetchUrl = require("node-fetch");
+const fetchUrl = require("axios");
 
 module.exports = new Command({
     name: "unshorturl",
@@ -16,13 +16,11 @@ module.exports = new Command({
     async execute(client, args, interaction) {
         const url = args.getString("link", true);
         if (!url.trim()) return interaction.reply({ content: 'Ссылка не может быть пуста', components: [] });
-        const response = await fetchUrl(`https://unshorten.me/json/${url}`)
-
-        const data = await response.json();
+        const data_ = await fetchUrl.get(`https://smoa.ds1nc.ru/https://dinaco.ds1nc.ru/api/unshort.php?url=${url}`)
 
         const Unshorten = new ButtonBuilder()
             .setLabel('Оригинальная ссылка')
-            .setURL(data.resolved_url)
+            .setURL(data_.data)
             .setStyle(ButtonStyle.Link);
         const firstActionRow = new ActionRowBuilder()
             .addComponents([Unshorten])
